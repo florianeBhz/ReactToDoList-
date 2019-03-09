@@ -16,9 +16,10 @@
     "react-material-ui-form-validator": "^2.0.7",
     "react-scripts": "2.1.5",
     "reflexbox": "^3.0.1",
-    "source-map-explorer": "^1.7.0"
+    "source-map-explorer": "^1.7.0",
+    "underscore": "^1.9.1"
   },
-  "homepage" : "http://florianeBhz.github.io/myapp",
+  "homepage": "http://florianeBhz.github.io/myapp",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

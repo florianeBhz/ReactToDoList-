@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 //others
 //import Formsy from 'formsy-react';
@@ -12,15 +14,22 @@ class AddForm extends Component {
     return (
       <div>
         {this.props.value}
-        <TextField
-          hintText="Enter a valid name"
-          floatingLabelText="Task name"
-          multiLine={true}
-          rows={2}
-          value={this.props.name}
-          onChange={this.props.handleNameChange}
-        />
-        <br />
+        <form className="my_Form">
+          <TextField
+            hintText="Enter a valid name"
+            floatingLabelText="Task name"
+            multiLine={true}
+            rows={2}
+            value={this.props.name}
+            onChange={this.props.handleNameChange}
+          />
+          <IconButton
+            onClick={this.props.onAdd}
+            disabled={this.props.name === ''}
+          >
+            <ContentAdd />
+          </IconButton>
+        </form>
       </div>
     );
   }
@@ -28,6 +37,8 @@ class AddForm extends Component {
 
 AddForm.propTypes = {
   name: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onAdd: PropTypes.func,
+  onCancel: PropTypes.func
 };
 export default AddForm;

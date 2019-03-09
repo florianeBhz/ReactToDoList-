@@ -1,128 +1,111 @@
 import React, { Component } from 'react';
 //material-ui
-import { List } from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import Snackbar from 'material-ui/Snackbar';
 
 //others
+import _ from 'underscore';
+
 //my own Components
 import TodoItem from './TodoItem.jsx';
 import AddForm from './AddForm.jsx';
-
-const styles = {
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    paddindRight: 100,
-    paddindBottom: 50
-  },
-  button: {
-    marginLeft: 200,
-    marginRight: 30,
-    marginBottom: 50,
-    marginTop: 50
-  }
-};
 
 let counter = 1;
 
 class TodoComponent extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      isAddFormOpened: false,
       name: '',
-      list: []
+      list: [],
+      openSnack: false,
+      isItemAdded: false
     };
   }
 
   addItem = () => {
-    let newitem = [{ id: counter++, item: this.state.name, finished: false }];
+    let newitem = [
+      { id: counter++, item: this.state.name, isCompleted: false }
+    ];
     this.setState({
-      isAddFormOpened: false,
       list: this.state.list.concat(newitem),
-      name: ''
+      openSnack: true,
+      name: '',
+      isItemAdded: true
     });
   };
 
-  openForm = () => {
-    this.setState({
-      isAddFormOpened: true
-    });
+  handleCheck = event => {
+    let checked = this.state.list.find(el => (el.id = event.target.value));
+    if (checked != null) {
+      let newchecked = { ...checked };
+      newchecked.isCompleted = true;
+      this.setState({
+        list: _.reject(this.state.list, el => {
+          return el.id === checked.id;
+        }).concat(newchecked),
+        openSnack: true
+      });
+    }
   };
 
-  closeForm = () => {
+  handleRequestClose = () => {
     this.setState({
-      isAddFormOpened: false,
-      name: ''
-    });
-  };
-
-  handleCheck = id => {
-    this.setState({
-      isAddFormOpened: false,
-      name: ''
+      openSnack: false,
+      name: '',
+      isItemAdded: false
     });
   };
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={false}
-        keyboardFocused={true}
-        onClick={this.closeForm}
-      />,
-      <FlatButton
-        label="Add"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.addItem}
-        disabled={this.state.name === ''}
-      />
-    ];
-
     return (
-      <div className="my_list" style={styles.root}>
+      <div>
         <Paper>
-          <List>
-            <Subheader>Some Front-end tools to learn</Subheader>
-            {this.state.list.map(elem => {
-              return (
-                <TodoItem
-                  name={elem.item}
-                  key={elem.id}
-                  handleCheck={this.handleCheck}
-                />
-              );
-            })}
-          </List>
-          <RaisedButton
-            label="Add"
-            primary={true}
-            style={styles.button}
-            onClick={this.openForm}
-          />
-        </Paper>
-
-        <Dialog
-          title="Add new item"
-          actions={actions}
-          modal={false}
-          open={this.state.isAddFormOpened}
-          onRequestClose={this.closeForm}
-        >
+          <Tabs>
+            <Tab label="To do">
+              <List className="my_list">
+                <Subheader>Some tools to learn</Subheader>
+                {this.state.list
+                  .filter(elem => !elem.isCompleted)
+                  .map(elem => (
+                    <TodoItem
+                      name={elem.item}
+                      id={elem.id}
+                      key={elem.id}
+                      onClick={event => this.handleCheck}
+                      handleCheck={event => this.handleCheck(event)}
+                    />
+                  ))}
+              </List>
+            </Tab>
+            <Tab label="Completed">
+              <List className="my_list">
+                <Subheader>Completed tasks</Subheader>
+                {this.state.list
+                  .filter(elem => elem.isCompleted)
+                  .map(elem => (
+                    <ListItem primaryText={elem.item} key={elem.id} />
+                  ))}
+              </List>
+            </Tab>
+          </Tabs>
           <AddForm
             name={this.state.name}
             handleNameChange={event =>
               this.setState({ name: event.target.value })
             }
+            onAdd={this.addItem}
           />
-        </Dialog>
+        </Paper>
+        <Snackbar
+          open={this.state.openSnack}
+          message={this.state.isItemAdded ? 'New task added' : 'Task completed'}
+          autoHideDuration={2000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
   }

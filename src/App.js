@@ -13,8 +13,11 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <div className="App">
-          <header className="App-header">
-            <TodoComponent />
+          <header className="App">
+            <div className="my_todo">
+              <div className="my_title">React-Material-UI ToDo List </div>
+              <TodoComponent />
+            </div>
           </header>
         </div>
       </MuiThemeProvider>
