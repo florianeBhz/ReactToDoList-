@@ -11,13 +11,9 @@ class TodoItem extends Component {
         <ListItem
           primaryText={this.props.name}
           leftCheckbox={
-            <Checkbox
-              key={this.props.id}
-              onCheck={this.props.handleCheck}
-              value={this.props.id}
-            />
+            <Checkbox key={this.props.name} onCheck={this.props.handleCheck} />
           }
-          value={this.props.id}
+          value={this.props.name}
         />
         <Divider />
       </div>
@@ -26,8 +22,7 @@ class TodoItem extends Component {
 }
 TodoItem.propTypes = {
   name: PropTypes.string,
-  handleCheck: PropTypes.func,
-  id: PropTypes.number
+  handleCheck: PropTypes.func
 };
 
 export default TodoItem;

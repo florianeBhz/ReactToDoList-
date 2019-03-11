@@ -11,10 +11,6 @@ import Snackbar from 'material-ui/Snackbar';
 import TodoItem from './TodoItem.jsx';
 import AddForm from './AddForm.jsx';
 
-import _ from 'underscore';
-
-let counter = 1;
-
 class TodoComponent extends Component {
   constructor(props) {
     super(props);
@@ -22,12 +18,13 @@ class TodoComponent extends Component {
       name: '',
       list: [],
       openSnack: false,
-      isItemAdded: false
+      isItemAdded: false,
+      counter: 0
     };
   }
 
   addItem = () => {
-    let newitem = { id: counter++, item: this.state.name, isCompleted: false };
+    let newitem = { item: this.state.name, isCompleted: false };
     this.setState({
       list: this.state.list.concat(newitem),
       openSnack: true,
@@ -36,29 +33,17 @@ class TodoComponent extends Component {
     });
   };
 
-  handleCheck = event => {
-    if (!_.isNull(event && !_.isNull(event.target))) {
-      if (!_.isNull(this.state.list)) {
-        console.log(this.state.list);
-        let checked = _.findWhere(this.state.list, { id: event.target.value });
-        if (!_.isUndefined(checked)) {
-          console.log(checked);
-          let completed = {
-            id: checked.id,
-            name: checked.name,
-            isCompleted: true
-          };
-          let newlist = _.reject(this.state.list, function(el) {
-            return el.id === checked.id;
-          });
-          newlist = newlist.concat[completed];
-          this.setState({
-            list: newlist,
-            openSnack: true
-          });
-        }
-      }
-    }
+  handleCheck = (event, index) => {
+    //event.preventDefault();
+    console.log(index);
+    let list = [...this.state.list];
+    console.log(list[index]);
+    list[index] = { ...list[index], isCompleted: event.target.checked };
+    list[index].isCompleted = true;
+    this.setState({
+      list: [...list],
+      openSnack: true
+    });
   };
 
   handleRequestClose = () => {
@@ -79,12 +64,11 @@ class TodoComponent extends Component {
                 <Subheader>Some tools to learn</Subheader>
                 {this.state.list
                   .filter(elem => !elem.isCompleted)
-                  .map(elem => (
+                  .map((elem, index) => (
                     <TodoItem
                       name={elem.item}
-                      id={elem.id}
-                      key={elem.id}
-                      handleCheck={event => this.handleCheck(event)}
+                      key={elem.item}
+                      handleCheck={event => this.handleCheck(event, index)}
                     />
                   ))}
               </List>
@@ -95,7 +79,7 @@ class TodoComponent extends Component {
                 {this.state.list
                   .filter(elem => elem.isCompleted)
                   .map(elem => (
-                    <ListItem primaryText={elem.item} key={elem.id} />
+                    <ListItem primaryText={elem.item} key={elem.item} />
                   ))}
               </List>
             </Tab>
