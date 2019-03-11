@@ -17,8 +17,7 @@ class TodoItem extends Component {
               value={this.props.id}
             />
           }
-          value={this.props.name}
-          onClick={this.props.handleCheck}
+          value={this.props.id}
         />
         <Divider />
       </div>

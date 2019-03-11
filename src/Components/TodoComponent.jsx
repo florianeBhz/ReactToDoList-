@@ -7,11 +7,11 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 
 //others
-import _ from 'underscore';
-
 //my own Components
 import TodoItem from './TodoItem.jsx';
 import AddForm from './AddForm.jsx';
+
+import _ from 'underscore';
 
 let counter = 1;
 
@@ -27,9 +27,7 @@ class TodoComponent extends Component {
   }
 
   addItem = () => {
-    let newitem = [
-      { id: counter++, item: this.state.name, isCompleted: false }
-    ];
+    let newitem = { id: counter++, item: this.state.name, isCompleted: false };
     this.setState({
       list: this.state.list.concat(newitem),
       openSnack: true,
@@ -39,16 +37,27 @@ class TodoComponent extends Component {
   };
 
   handleCheck = event => {
-    let checked = this.state.list.find(el => (el.id = event.target.value));
-    if (checked != null) {
-      let newchecked = { ...checked };
-      newchecked.isCompleted = true;
-      this.setState({
-        list: _.reject(this.state.list, el => {
-          return el.id === checked.id;
-        }).concat(newchecked),
-        openSnack: true
-      });
+    if (!_.isNull(event && !_.isNull(event.target))) {
+      if (!_.isNull(this.state.list)) {
+        console.log(this.state.list);
+        let checked = _.findWhere(this.state.list, { id: event.target.value });
+        if (!_.isUndefined(checked)) {
+          console.log(checked);
+          let completed = {
+            id: checked.id,
+            name: checked.name,
+            isCompleted: true
+          };
+          let newlist = _.reject(this.state.list, function(el) {
+            return el.id === checked.id;
+          });
+          newlist = newlist.concat[completed];
+          this.setState({
+            list: newlist,
+            openSnack: true
+          });
+        }
+      }
     }
   };
 
@@ -75,7 +84,6 @@ class TodoComponent extends Component {
                       name={elem.item}
                       id={elem.id}
                       key={elem.id}
-                      onClick={event => this.handleCheck}
                       handleCheck={event => this.handleCheck(event)}
                     />
                   ))}
