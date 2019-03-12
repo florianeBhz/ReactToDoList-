@@ -35,7 +35,8 @@ class TodoComponent extends Component {
     });
   };
 
-  handleCheck = index => {
+  handleCheck = (event, index) => {
+    event.preventDefault();
     let list = [...this.state.list];
     list[index].isCompleted = true;
     this.setState({
@@ -79,7 +80,7 @@ class TodoComponent extends Component {
     return (
       <div className="my_todo">
         <Paper>
-          <Tabs>
+          <Tabs className="my_tabs">
             <Tab label="To do">
               <List className="my_list">
                 <Subheader>Some tools to learn</Subheader>
@@ -88,7 +89,7 @@ class TodoComponent extends Component {
                     <TodoItem
                       name={elem.item}
                       key={elem.item}
-                      handleCheck={() => this.handleCheck(index)}
+                      handleCheck={event => this.handleCheck(event, index)}
                     />
                   ) : null
                 )}

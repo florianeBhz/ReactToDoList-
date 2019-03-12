@@ -3,7 +3,6 @@ import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
 import PropTypes from 'prop-types';
-import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import ActionSettingsBackupRestore from 'material-ui/svg-icons/action/settings-backup-restore';
 

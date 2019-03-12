@@ -15,7 +15,6 @@
   justify-content: center;
   -ms-flex-align: start;
   align-items: flex-start;
-  //font-size: calc(10px + 2vmin);
   width: 100%;
   .my_title {
     font-size: calc(20px + 2vmin);
@@ -36,6 +35,9 @@
   min-height: 40vh;
   .my_list {
     min-height: 40vh;
+  }
+  .my_tabs {
+    overflow-y: scroll;
   }
   .my_Form {
     padding-left: 20px;
