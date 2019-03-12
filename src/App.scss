@@ -21,19 +21,21 @@
     font-size: calc(20px + 2vmin);
     color: #fff;
     padding-bottom: 10vh;
+    margin-left: 20%;
   }
 }
 
 .my_todo {
   display: flex;
   align-items: center;
-  padding-left: 40%;
-  padding-right: 40%;
+  padding-left: 25%;
+  padding-right: 20%;
   flex-wrap: wrap;
   width: 100%;
+  min-width: 60%;
   min-height: 40vh;
   .my_list {
-    min-height: 25vh;
+    min-height: 40vh;
   }
   .my_Form {
     padding-left: 20px;

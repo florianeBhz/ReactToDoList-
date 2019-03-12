@@ -9,6 +9,7 @@ import Snackbar from 'material-ui/Snackbar';
 //others
 //my own Components
 import TodoItem from './TodoItem.jsx';
+import CompletedItem from './CompletedItem.jsx';
 import AddForm from './AddForm.jsx';
 
 class TodoComponent extends Component {
@@ -19,7 +20,7 @@ class TodoComponent extends Component {
       list: [],
       openSnack: false,
       isItemAdded: false,
-      counter: 0
+      snackMessage: ''
     };
   }
 
@@ -29,20 +30,38 @@ class TodoComponent extends Component {
       list: this.state.list.concat(newitem),
       openSnack: true,
       name: '',
-      isItemAdded: true
+      isItemAdded: true,
+      snackMessage: 'New item added'
     });
   };
 
-  handleCheck = (event, index) => {
-    //event.preventDefault();
-    console.log(index);
+  handleCheck = index => {
     let list = [...this.state.list];
-    console.log(list[index]);
-    list[index] = { ...list[index], isCompleted: event.target.checked };
     list[index].isCompleted = true;
     this.setState({
       list: [...list],
-      openSnack: true
+      openSnack: true,
+      snackMessage: 'Task completed'
+    });
+  };
+
+  handleUndo = index => {
+    let list = [...this.state.list];
+    list[index].isCompleted = false;
+    this.setState({
+      list: [...list],
+      openSnack: true,
+      snackMessage: 'Roll back succeed'
+    });
+  };
+
+  handleRemove = index => {
+    let list = [...this.state.list];
+    list.splice(index, 1);
+    this.setState({
+      list: [...list],
+      openSnack: true,
+      snackMessage: 'Task removed'
     });
   };
 
@@ -50,37 +69,44 @@ class TodoComponent extends Component {
     this.setState({
       openSnack: false,
       name: '',
-      isItemAdded: false
+      isItemAdded: false,
+      snackMessage: ''
     });
   };
 
   render() {
+    let list = { ...this.state.list };
     return (
-      <div>
+      <div className="my_todo">
         <Paper>
           <Tabs>
             <Tab label="To do">
               <List className="my_list">
                 <Subheader>Some tools to learn</Subheader>
-                {this.state.list
-                  .filter(elem => !elem.isCompleted)
-                  .map((elem, index) => (
+                {this.state.list.map((elem, index) =>
+                  !elem.isCompleted ? (
                     <TodoItem
                       name={elem.item}
                       key={elem.item}
-                      handleCheck={event => this.handleCheck(event, index)}
+                      handleCheck={() => this.handleCheck(index)}
                     />
-                  ))}
+                  ) : null
+                )}
               </List>
             </Tab>
             <Tab label="Completed">
               <List className="my_list">
                 <Subheader>Completed tasks</Subheader>
-                {this.state.list
-                  .filter(elem => elem.isCompleted)
-                  .map(elem => (
-                    <ListItem primaryText={elem.item} key={elem.item} />
-                  ))}
+                {this.state.list.map((elem, index) =>
+                  elem.isCompleted ? (
+                    <CompletedItem
+                      name={elem.item}
+                      key={elem.item}
+                      handleRemove={() => this.handleRemove(index)}
+                      handleUndo={() => this.handleUndo(index)}
+                    />
+                  ) : null
+                )}
               </List>
             </Tab>
           </Tabs>
@@ -94,7 +120,7 @@ class TodoComponent extends Component {
         </Paper>
         <Snackbar
           open={this.state.openSnack}
-          message={this.state.isItemAdded ? 'New task added' : 'Task completed'}
+          message={this.state.snackMessage}
           autoHideDuration={2000}
           onRequestClose={this.handleRequestClose}
         />
