@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "boostrap": "^2.0.0",
+    "bootstrap": "^4.3.1",
     "formsy-material-ui": "^0.6.3",
     "formsy-react": "^1.1.5",
     "husky": "^1.3.1",
